@@ -2,10 +2,51 @@ package com.example.kotlincoroutines
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.databinding.DataBindingUtil
+import com.example.kotlincoroutines.databinding.ActivityMainBinding
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView( this ,R.layout.activity_main)
+
+        // GlobalScope coroutines will work in all application when off application coroutines will off work.
+        // her will launch on DefaultDispatcher
+//        GlobalScope.launch { //===> example 1
+//            Log.d("fun"," current thread : ${Thread.currentThread().name}")
+//            printMyTextAfterDelay("Mohamed")
+//        }
+
+        // example fro create Thread manual write.
+//        GlobalScope.launch (newSingleThreadContext("Mohamed Thread")){ //===> example 1
+//            Log.d("fun"," current thread : ${Thread.currentThread().name}")
+//            printMyTextAfterDelay("Mohamed")
+//        }
+
+
+        runBlocking {
+            printMyTextAfterDelay("Mohamed Keshawy")
+        }
+
+    }
+
+//    suspend fun printMyTextAfterDelay( myText : String){ //===> example 1
+//        delay(2000)
+//        Log.d("my Fun" , myText)
+//    }
+
+
+    suspend fun printMyTextAfterDelay( myText : String) { //===> example 2
+        // this will print myText on UI view using Dispatchers.IO and Dispatchers.Main
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(2000)
+            withContext(Dispatchers.Main){
+                binding.tvHelloWorld.text = myText
+            }
+        }
     }
 }
