@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView( this ,R.layout.activity_main)
 
         // GlobalScope coroutines will work in all application when off application coroutines will off work.
-        // her will launch on DefaultDispatcher
+        // hear will launch on DefaultDispatcher
 //        GlobalScope.launch { //===> example 1
 //            Log.d("fun"," current thread : ${Thread.currentThread().name}")
 //            printMyTextAfterDelay("Mohamed")
@@ -28,10 +28,16 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-        runBlocking {
-            printMyTextAfterDelay("Mohamed Keshawy")
-        }
+//        runBlocking {
+//            printMyTextAfterDelay("Mohamed Keshawy") //===> example 2
+//        }
 
+
+        runBlocking {
+            // example 3
+            printMyTextAfterDelay("Mohamed1")
+            printMyTextAfterDelay("Mohamed2")
+        }
     }
 
 //    suspend fun printMyTextAfterDelay( myText : String){ //===> example 1
@@ -40,13 +46,24 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
-    suspend fun printMyTextAfterDelay( myText : String) { //===> example 2
-        // this will print myText on UI view using Dispatchers.IO and Dispatchers.Main
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(2000)
-            withContext(Dispatchers.Main){
-                binding.tvHelloWorld.text = myText
-            }
-        }
+//    suspend fun printMyTextAfterDelay( myText : String) { //===> example 2
+//        // this will print myText on UI view using Dispatchers.IO and Dispatchers.Main
+//        GlobalScope.launch(Dispatchers.IO) {
+//            delay(2000)
+//            withContext(Dispatchers.Main){
+//                binding.tvHelloWorld.text = myText
+//            }
+//        }
+//    }
+
+
+   suspend fun printMyTextAfterDelay( myText : String){ //===> example 3
+       GlobalScope.launch{
+           delay(2000)
+           Log.d("MainActivity",myText)
+       }
     }
+
+
+
 }
