@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.kotlincoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,11 +34,42 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-        runBlocking {
-            // example 3
-            printMyTextAfterDelay("Mohamed1")
-            printMyTextAfterDelay("Mohamed2")
+//        runBlocking {
+//            // example 3
+//            printMyTextAfterDelay("Mohamed1")
+//            printMyTextAfterDelay("Mohamed2")
+//        }
+
+
+        /* Async Await */
+//        GlobalScope.launch {
+//            val time = measureTimeMillis {
+//                val dataUser = async { getUserFromNetwork() }
+//                val localUser = async { getUserFromDatabase() }
+//                if (dataUser.await() == localUser.await()) {
+//                    Log.d("Here", "Equals")
+//                } else {
+//                    Log.d("Here", "not Equals")
+//                }
+//            }
+//            Log.d("Here" , "${time}")
+//        }
+
+
+        /* job */
+        GlobalScope.launch {
+            val time = measureTimeMillis {
+                val dataUser = async { getUserFromNetwork() }
+                val localUser = async { getUserFromDatabase() }
+                if (dataUser.await() == localUser.await()) {
+                    Log.d("Here", "Equals")
+                } else {
+                    Log.d("Here", "not Equals")
+                }
+            }
+            Log.d("Here" , "${time}")
         }
+
     }
 
 //    suspend fun printMyTextAfterDelay( myText : String){ //===> example 1
@@ -57,13 +89,34 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
-   suspend fun printMyTextAfterDelay( myText : String){ //===> example 3
-       GlobalScope.launch{
-           delay(2000)
-           Log.d("MainActivity",myText)
-       }
+//   suspend fun printMyTextAfterDelay( myText : String){ //===> example 3
+//       GlobalScope.launch{
+//           delay(2000)
+//           Log.d("MainActivity",myText)
+//       }
+//    }
+
+
+//    /* Async Await */
+//    suspend fun getUserFromNetwork() : String{
+//        delay(200)
+//        return "Mohamed"
+//    }
+//
+//    suspend fun getUserFromDatabase() : String{
+//        delay(300)
+//        return "Mohamed"
+//    }
+
+
+    /* Job */
+    suspend fun getUserFromNetwork() : String{
+        delay(200)
+        return "Mohamed"
     }
 
-
-
+    suspend fun getUserFromDatabase() : String{
+        delay(300)
+        return "Mohamed"
+    }
 }
