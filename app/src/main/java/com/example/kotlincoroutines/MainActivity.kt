@@ -6,15 +6,53 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.kotlincoroutines.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityMainBinding
-    private val parentJob : Job = Job()
+    lateinit var binding    : ActivityMainBinding
+    private val parentJob   : Job = Job()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView( this ,R.layout.activity_main)
+
+
+
+        /* channels */                     // Channel<String>( capacity : 2 here create buffer. )
+//        val kotlinChannel = Channel<String>() // create new channel send example.
+//        val charList = arrayOf("A","B","C","D")
+//        runBlocking {
+//            launch {
+//                for( char in charList){
+//                    kotlinChannel.send(char)
+//
+//                }
+//            }
+//
+//            launch {
+//                for(char in kotlinChannel){
+//                    Log.d("here",char)
+//                    delay(2000)
+//                }
+//            }
+//        }
+
+        /* channels */                     // Channel<String>( capacity : 2 here create buffer. )
+//        val kotlinChannel = Channel<String>() // create new channel offer example.
+//        val charList = arrayOf("A","B","C","D")
+//        runBlocking {
+//            launch {
+//                for( char in charList){
+//                    kotlinChannel.offer(char)
+//
+//                }
+//            }
+//            for(char in kotlinChannel){
+//                Log.d("here",char)
+//            }
+//        }
+
 
         // GlobalScope coroutines will work in all application when off application coroutines will off work.
         // hear will launch on DefaultDispatcher
@@ -61,22 +99,25 @@ class MainActivity : AppCompatActivity() {
                     // parent
         //val parentJob : Job = Job()
             // child for parent job.
-        val coroutinesScope : CoroutineScope = CoroutineScope(Dispatchers.IO+parentJob)
-        coroutinesScope.launch(parentJob) {
+//        val coroutinesScope : CoroutineScope = CoroutineScope(Dispatchers.IO+parentJob)
+//        coroutinesScope.launch(parentJob) {
+//
+//            // child for job for child job parent.
+//            val child1 = launch { getUserFromNetwork() } // child1
+//            val child2 =  launch { getUserFromDatabase() } // child2
+//
+//            // child1.join() // work on wait child1 finish all work and work delay after finish child1 all work.
+//            // child2.join() // delay will wait child1 and child2 finish work and work after finish all operation for it.
+//            // joinAll(child1 , child2) // work on finish child1 and child2 all operation and start work operation for delay.
+//
+//            // child1.cancelAndJoin() // wait finish all operation for this function and cancel work.
+//            launch { delay(2000) }
+//        }
+//        //parentJob.cancel() //==> work on cancel for job where cancel parent job will cancel all operation for coroutines.
 
-            // child for job for child job parent.
-            val child1 = launch { getUserFromNetwork() } // child1
-            val child2 =  launch { getUserFromDatabase() } // child2
 
-            // child1.join() // work on wait child1 finish all work and work delay after finish child1 all work.
-            // child2.join() // delay will wait child1 and child2 finish work and work after finish all operation for it.
-            // joinAll(child1 , child2) // work on finish child1 and child2 all operation and start work operation for delay.
 
-            // child1.cancelAndJoin() // wait finish all operation for this function and cancel work.
-            launch { delay(2000) }
-        }
-        //parentJob.cancel() //==> work on cancel for job where cancel parent job will cancel all operation for coroutines.
-    }
+   } // ==> end onCreate.
 
 //    suspend fun printMyTextAfterDelay( myText : String){ //===> example 1
 //        delay(2000)
@@ -116,15 +157,15 @@ class MainActivity : AppCompatActivity() {
 
 
     /* Job */
-    suspend fun getUserFromNetwork() : String{
-        delay(200)
-        return "Mohamed"
-    }
-
-    suspend fun getUserFromDatabase() : String{
-        delay(300)
-        return "Mohamed"
-    }
+//    suspend fun getUserFromNetwork() : String{
+//        delay(200)
+//        return "Mohamed"
+//    }
+//
+//    suspend fun getUserFromDatabase() : String{
+//        delay(300)
+//        return "Mohamed"
+//    }
 
     /* Job */
 //    override fun onStop() { // when stop this activity will cancel any coroutines in this activit.
